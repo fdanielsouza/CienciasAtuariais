@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Tuple
 import pandas as pd
 from functools import partial
 
@@ -60,6 +60,23 @@ def funcao(expressao: str, x: Union[int, float]) -> Union[int, float]:
     :return: o resultado da função, ou um valor de y
     """
     return eval(expressao)
+
+
+def encontra_trocas_sinal(valores: List[Union[int, float]]) -> List[Tuple[Union[int, float]]]:
+    """
+    Encontra os pares de valores onde ocorrem mudanças de sinal entre eles em uma lista numérica
+
+    :param valores: uma lista de valores numéricos
+    :return: uma lista de tuplas contendo os intervalos onde há mudança de sinal
+    """
+    resultado = list()
+
+    for i, y in enumerate(valores):
+        y_anterior = valores[i - 1]
+        if i and y_anterior * y < 0:
+            resultado.append((y_anterior, y))
+
+    return resultado
 
 
 def quociente_diferencial(expressao: str, x: Union[int, float], dx: float) -> Union[int, float]:
@@ -164,6 +181,10 @@ def metodo_secantes(
 #print(metodo_bisseccao("x ** 3 - x - 1", -3, 2, 20))
 #print(metodo_newton_raphson("x ** 2", 1, 0.000001, 0.00001, 20))
 #print(metodo_secantes("x ** 2", 1, 3, 0.00001, 20))
+
+
+
+
 
 
 
