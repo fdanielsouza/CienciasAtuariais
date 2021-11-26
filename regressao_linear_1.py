@@ -1,6 +1,7 @@
 from typing import Union, List
 from scipy.stats import f
 import estatistica_basica as eb
+from math import log
 
 
 def inclinacao_reta(
@@ -180,8 +181,11 @@ def p_value_estatistica_f(
     return resultado
 
 
-x = [25, 20, 40, 45, 22, 63, 70, 60, 55, 50, 30]
-y = [2000, 3500, 1000, 800, 3000, 1300, 1500, 1100, 950, 900, 1600]
+x = [14.83, 13.54, 12.74, 13.04, 12.73, 13.40, 13.46, 13.96, 14.67, 15.32, 16.33]
+y = [1242.5, 1247.4, 1262.1, 1292.3, 1357.9, 1402.5, 1443.3, 1464.7, 1519.2, 1539.9, 1569.4]
+x = [log(x_i) for x_i in x]
+y = [log(y_i) for y_i in y]
+
 
 
 print(inclinacao_reta(x, y))
@@ -197,15 +201,10 @@ ou simplesmente elevando o coeficiente de correlação ao quadrado, que é bem m
 print(coef_determinacao(x, y))
 print(eb.coef_correlacao(x, y) ** 2)
 print(estatistica_f(media_dos_quadrados(soma_quadrados_explicados(x, y), 1), media_dos_quadrados(soma_quadrados_residuos(x, y), len(x) - 2)))
-print(1-p_value_estatistica_f(
+print(p_value_estatistica_f(
     estatistica_f(
         media_dos_quadrados(soma_quadrados_explicados(x, y), 1),
         media_dos_quadrados(soma_quadrados_residuos(x, y), len(x) - 2)
-    ), 1, 9)
+    ), 1, len(x) - 2)
 )
-
-print(estatistica_f(
-        media_dos_quadrados(soma_quadrados_explicados(x, y), 1),
-        media_dos_quadrados(soma_quadrados_residuos(x, y), len(x) - 2)
-    ))
 

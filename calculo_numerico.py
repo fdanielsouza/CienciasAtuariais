@@ -1,6 +1,7 @@
 from typing import Union, List, Tuple
 import pandas as pd
 from functools import partial
+from calculo import funcao, quociente_diferencial, derivar_em_intervalo
 
 
 def metodo_bisseccao(
@@ -51,17 +52,6 @@ def metodo_bisseccao(
     return resultado
 
 
-def funcao(expressao: str, x: Union[int, float]) -> Union[int, float]:
-    """
-    Avalia uma função contendo a variável x
-
-    :param expressao: um texto contendo uma expressão matemática contendo a variável x
-    :param x: valor em que a variável x será avaliada
-    :return: o resultado da função, ou um valor de y
-    """
-    return eval(expressao)
-
-
 def encontra_trocas_sinal(valores: List[Union[int, float]]) -> List[Tuple[Union[int, float]]]:
     """
     Encontra os pares de valores onde ocorrem mudanças de sinal entre eles em uma lista numérica
@@ -77,33 +67,6 @@ def encontra_trocas_sinal(valores: List[Union[int, float]]) -> List[Tuple[Union[
             resultado.append((y_anterior, y))
 
     return resultado
-
-
-def quociente_diferencial(expressao: str, x: Union[int, float], dx: float) -> Union[int, float]:
-    """
-    Deriva uma determinada função contendo a variável x por aproximação utilizando um número dx preferencialmente pequeno
-
-    :param expressao: um texto contendo uma expressão matemática contendo a variável x
-    :param x: um valor de "x" a ser avaliado na função
-    :param dx: um valor muito pequeno que deve simular o limite de delta_x -> 0
-    :return: o valor aproximado da inclinação da reta tangente em x, f(x)
-    """
-    f = partial(funcao, expressao)
-    return (f(x + dx) - f(x)) / dx
-
-
-def derivar_em_intervalo(expressao: str, a: int, b: int, dx: Union[int, float]) -> Union[List[int], List[float]]:
-    """
-    Deriva determinada função matemática para cada valor de x em um intervalo de números inteiros
-
-    :param expressao: um texto contendo uma expressão matemática contendo a variável x
-    :param a: o valor inteiro inicial do intervalo de avaliação das derivadas
-    :param b: o valor inteiro final do intervalo de avaliação das derivadas
-    :param dx: um valor muito pequeno que deve simular o limite de delta_x -> 0
-    :return: o valor aproximado da reta tangente em x, f(x) para cada x no intervalo especificado
-    """
-    x = range(a, b)
-    return [quociente_diferencial(expressao, xi, dx) for xi in x]
 
 
 def metodo_newton_raphson(
