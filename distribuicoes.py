@@ -1,5 +1,6 @@
 from math import sqrt, pi, exp, erf
-from calculo import integral_aproximada
+from calculo import integral
+
 
 def fatorial(x):
     return x * fatorial(x - 1) if x > 1 else 1
@@ -47,6 +48,7 @@ def fdp_poisson(x, la):
     """
     return exp(-la) * la ** x / fatorial(x)
 
+
 def fdp_exponencial(t, la):
     """
     A probabilidade de decorrer t períodos entre um evento e outro descritos pela dstribuição poisson.
@@ -56,6 +58,34 @@ def fdp_exponencial(t, la):
     :return: a probabilidade de o evento ocorrer dentro do tempo t
     """
     return la * exp(-la * t)
+
+
+def funcao_gama(a):
+    """
+    Dá o resultado aproximado da função gama, que é uma generalização do fatorial para números reais.
+
+    :param a: o valor de alfa
+    :return: o resultado da função gama
+    """
+    return integral(f"x ** ({a} - 1) * exp(-x)", 0, 100)
+
+def fdp_gama(x, a, b):
+    """
+    Função da distribuição de probabilidade gama. Essa distribuição é uma generalização da exponencial quando a != 1.
+
+    :param x: valor em que se quer saber a probabilidade da função
+    :param a: valor de alfa, a forma da distribuição
+    :param b: valor de beta, a inclinação da distribuição
+    :return: a probabilidade da distribuição em x
+    """
+    return (1 / funcao_gama(a) / b ** a) * x ** (a - 1) * exp(-x / b)
+
+def funcao_beta(a, b):
+    return integral(f"x ** ({a} - 1) * (1 - x) ** ({b} - 1)", 0, 1)
+
+def fdp_beta(x, a, b):
+    return (1 / funcao_beta(a, b)) * x ** (a - 1) * (1 - x) ** (b - 1)
+
 
 def uniforme(x):
     return 1 if x and x <= 1 else 0
@@ -91,5 +121,8 @@ def fda_inversa_normal(p, mu=0, si=1, tolerancia=0.000001):
             break
 
     return z_med
+
+
+
 
 

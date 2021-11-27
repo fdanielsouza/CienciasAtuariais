@@ -1,6 +1,5 @@
 from typing import Union, List, Tuple
 import pandas as pd
-from functools import partial
 from calculo import funcao, quociente_diferencial, derivar_em_intervalo
 
 

@@ -1,4 +1,5 @@
 from typing import Union, List
+from functools import partial
 from math import *
 
 
@@ -40,7 +41,7 @@ def derivar_em_intervalo(expressao: str, a: int, b: int, dx: Union[int, float]) 
     return [quociente_diferencial(expressao, xi, dx) for xi in x]
 
 
-def integral_aproximada(expressao, a, b, dx=0.0001):
+def integral(expressao, a, b, dx=0.0001):
     """
     Realiza a aproximação de uma integral, dada uma expressão com variável "x" e um intervalo a < b
 
