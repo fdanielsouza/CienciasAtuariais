@@ -1,6 +1,7 @@
 from typing import Union, List, Tuple
 import pandas as pd
-from calculo import funcao, quociente_diferencial, derivar_em_intervalo
+import re
+from calculo import somar_vetores_iguais, multiplicar_matriz_vetor, funcao, quociente_diferencial, derivar_em_intervalo
 
 
 def metodo_bisseccao(
@@ -140,9 +141,48 @@ def metodo_secantes(
     return resultado
 
 
-#print(metodo_bisseccao("x ** 3 - x - 1", -3, 2, 20))
-#print(metodo_newton_raphson("x ** 2", 1, 0.000001, 0.00001, 20))
-#print(metodo_secantes("x ** 2", 1, 3, 0.00001, 20))
+def metodo_gauss_seidel(sistema: List[str], max_iteracoes: int = 10) -> List[float]:
+    """
+    Este método aproxima a solução de um sistema linear de forma iterativa. Caso alguma variável possua coeficiente 0,
+    ele deve ser colocado (exemplo: "0x"). As variáveis podem ter quaisquer letras, mas não podem usar números.
+
+    :param sistema: uma lista de equações escritas em formato de texto
+    :param max_iteracoes: o máximo de vezes que o algorítmo deverá iterar
+    :return: um vetor com os valores aproximados aos termos independentes
+    """
+    matriz = list()
+    vetor_independente = list()
+    vetor_iterativo = [0 for _ in sistema]
+
+    for i, eq in enumerate(sistema):
+        t_independente = re.findall("=?[\-0-9]+$", eq)[0]
+        termos = list(filter(None, re.split("[\+\-\s]", re.sub("=.?[\-0-9]+$", "", eq))))
+        coeficientes = [re.sub("[a-zA-Z]", "", t) for t in termos]
+        coeficientes = ["1" if not len(c) else c for c in coeficientes]
+
+        sinais = re.findall("[\+\-]", eq)
+        if len(sinais) < len(coeficientes):
+            sinais.insert(i, "-")
+
+        coeficiente_divisao = sinais[i] + coeficientes[i]
+        del coeficientes[i]
+        del sinais[i]
+        sinais = ["-" if s == "+" else "+" for s in sinais]
+
+        vetor_coeficientes = [float(s + c) / float(coeficiente_divisao) for (s, c) in zip(sinais, coeficientes)]
+        vetor_coeficientes.insert(i, 0)
+        matriz.append(vetor_coeficientes)
+        vetor_independente.append(float(t_independente) / float(coeficiente_divisao))
+
+    for i in range(max_iteracoes):
+        vetor_iterativo_anterior = vetor_iterativo
+        vetor_iterativo = somar_vetores_iguais(multiplicar_matriz_vetor(matriz, vetor_iterativo), vetor_independente)
+        erro = max([abs(b - a) for (a, b) in zip(vetor_iterativo_anterior, vetor_iterativo)])
+
+    return vetor_iterativo
+
+
+print(metodo_gauss_seidel(["10a + 2b + 3c = 7", "a + 5b + c = 8", "2a +3b +10c = 6"]))
 
 
 

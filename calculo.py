@@ -3,6 +3,16 @@ from functools import partial
 from math import *
 
 
+def somar_vetores_iguais(vetor1, vetor2):
+    if len(vetor1) != len(vetor2):
+        return None
+
+    return [a + b for (a, b) in zip(vetor1, vetor2)]
+
+def multiplicar_matriz_vetor(matriz, vetor):
+    return [sum([im * iv for im, iv in zip(linha, vetor)]) for linha in matriz]
+
+
 def funcao(expressao: str, x: Union[int, float]) -> Union[int, float]:
     """
     Avalia uma função contendo a variável x
