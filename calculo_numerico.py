@@ -144,7 +144,8 @@ def metodo_secantes(
 def metodo_gauss_seidel(sistema: List[str], max_iteracoes: int = 10) -> List[float]:
     """
     Este método aproxima a solução de um sistema linear de forma iterativa. Caso alguma variável possua coeficiente 0,
-    ele deve ser colocado (exemplo: "0x"). As variáveis podem ter quaisquer letras, mas não podem usar números.
+    ele deve ser colocado (exemplo: "0x"), já o coeficiente 1 pode ser omitido. As variáveis podem ter quaisquer
+    letras, mas não podem usar números (use "a", "b", "c" ao invés de "x1", "x2", "x3").
 
     :param sistema: uma lista de equações escritas em formato de texto
     :param max_iteracoes: o máximo de vezes que o algorítmo deverá iterar
