@@ -60,14 +60,16 @@ def fdp_exponencial(t, la):
     return la * exp(-la * t)
 
 
-def funcao_gama(a):
+def funcao_gama(a, x=None):
     """
     Dá o resultado aproximado da função gama, que é uma generalização do fatorial para números reais.
 
     :param a: o valor de alfa
+    :param x: o valor de x para a função gama incompleta
     :return: o resultado da função gama
     """
-    return integral(f"x ** ({a} - 1) * exp(-x)", 0, 100)
+    x = x if x else 100
+    return integral(f"x ** ({a} - 1) * exp(-x)", 0, x)
 
 def fdp_gama(x, a, b):
     """
@@ -122,6 +124,28 @@ def fda_inversa_normal(p, mu=0, si=1, tolerancia=0.000001):
 
     return z_med
 
+
+
+def fdp_qui2(q, gl):
+    return 1 / 2 ** (gl / 2) / funcao_gama(gl / 2) * q ** (gl / 2 - 1) * exp(-q / 2)
+
+def fda_qui2(q, gl):
+    return funcao_gama(gl/2, q/2) / funcao_gama(gl/2)
+
+def fda_inversa_qui2(p, gl, tolerancia=0.1):
+    q_min, p_min = 0, 0
+    q_max, p_max = 200, 1
+    while q_max - q_min > tolerancia:
+        q_med = (q_max + q_min) / 2
+        p_med = fda_qui2(q_med, gl)
+        if p_med < p:
+            q_min, p_min = q_med, p_med
+        elif p_med > p:
+            q_max, p_max = q_med, p_med
+        else:
+            break
+
+    return q_med
 
 
 

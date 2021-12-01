@@ -102,12 +102,3 @@ def coef_correlacao(
     cov = covariancia(variavel1, variavel2, lista_amostral)
     resultado = cov / (sigma1 * sigma2)
     return resultado
-
-
-x = [25, 20, 40, 45, 22, 63, 70, 60, 55, 50, 30]
-y = [2000, 3500, 1000, 800, 3000, 1300, 1500, 1100, 950, 900, 1600]
-
-print(variancia(x))
-print(covariancia(x, y))
-print(coef_correlacao(x, y))
-print(sum(quadrados_totais(y)))
