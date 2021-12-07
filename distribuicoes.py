@@ -82,21 +82,36 @@ def fdp_gama(x, a, b):
     """
     return (1 / funcao_gama(a) / b ** a) * x ** (a - 1) * exp(-x / b)
 
-def funcao_beta(a, b):
-    return integral(f"x ** ({a} - 1) * (1 - x) ** ({b} - 1)", 0, 1)
+
+def funcao_beta(a, b, x=None):
+    """
+    A função beta tem propriedades definidas a partir da função gama e é utilizada nas distribuições beta e f
+
+    :param a: um número real positivo
+    :param b: um número real positivo
+    :param x: valor de x para a função beta incompleta
+    :return: o valor da função beta
+    """
+    x = x if x else 1
+    return integral(f"x ** ({a} - 1) * (1 - x) ** ({b} - 1)", 0, x)
+
+
+def funcao_beta_incompleta_regularizada(a, b, x):
+    return funcao_beta(a, b, x) / funcao_beta(a, b)
+
 
 def fdp_beta(x, a, b):
     return (1 / funcao_beta(a, b)) * x ** (a - 1) * (1 - x) ** (b - 1)
 
 
-def uniforme(x):
-    return 1 if x and x <= 1 else 0
+def fdp_uniforme(x, a, b):
+    return 1 / (b - a) if a <= x <= b else 0
 
-def fda_uniforme(x):
-    if x < 0:
+def fda_uniforme(x, a, b):
+    if x < a:
         return 0
-    elif x < 1:
-        return x
+    elif x <= b:
+        return (x - a) / (b - a)
     else:
         return 1
 
@@ -126,11 +141,11 @@ def fda_inversa_normal(p, mu=0, si=1, tolerancia=0.000001):
 
 
 
-def fdp_qui2(q, gl):
-    return 1 / 2 ** (gl / 2) / funcao_gama(gl / 2) * q ** (gl / 2 - 1) * exp(-q / 2)
+def fdp_qui2(x, gl):
+    return 1 / 2 ** (gl / 2) / funcao_gama(gl / 2) * x ** (gl / 2 - 1) * exp(-x / 2)
 
-def fda_qui2(q, gl):
-    return funcao_gama(gl/2, q/2) / funcao_gama(gl/2)
+def fda_qui2(x, gl):
+    return funcao_gama(gl/2, x/2) / funcao_gama(gl/2)
 
 def fda_inversa_qui2(p, gl, tolerancia=0.1):
     q_min, p_min = 0, 0
@@ -146,6 +161,13 @@ def fda_inversa_qui2(p, gl, tolerancia=0.1):
             break
 
     return q_med
+
+
+def fdp_f(x, df1, df2):
+    return sqrt((x * df1) ** df1 * df2 ** df2) / x / funcao_beta(df1 / 2, df2 / 2)
+
+def fda_f(x, df1, df2):
+    return funcao_beta_incompleta_regularizada(df1 / 2, df2 / 2, x * df1 / (x * df1 + df2))
 
 
 

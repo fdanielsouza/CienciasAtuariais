@@ -1,7 +1,5 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from math import sqrt, log
-from estatistica_basica import media
 from distribuicoes import fda_inversa_qui2
 
 
@@ -39,7 +37,7 @@ def teste_unif_qui_quadrado(n, gl, val_obs, a):
     return "Aceitar h0" if teste_h0 else "Rejeitar h0"
 
 
-def modelo_seguros_gompertz(n, B, c, idade, benef, juros):
+def modelo_seguros_gompertz(n, B=0.0000429, c=1.1070839, idade, benef, juros):
     v = 1/ (1 + juros)
     seq_uniforme = gerar_sequencia_congruente(n, 800, np.random.randint(low=1, high=9999))
     modelo = [log(1 - (log(c) * log(u) / B / c ** idade)) / log(c) for u in seq_uniforme]
@@ -47,5 +45,5 @@ def modelo_seguros_gompertz(n, B, c, idade, benef, juros):
     return modelo, perda
 
 
-m, p = modelo_seguros_gompertz(10000, 0.0000429, 1.1070839, 70, 200, 0.03)
+m, p = modelo_seguros_gompertz(10000, idade=70, benef=200, juros=0.03)
 print(m)

@@ -1,7 +1,8 @@
 from typing import Union, List
 from scipy.stats import f
-import estatistica_basica as eb
 from math import log
+import estatistica_basica as eb
+from distribuicoes import fda_f
 
 
 def inclinacao_reta(
@@ -177,7 +178,7 @@ def p_value_estatistica_f(
     :param grau_liberdade_denominador: graus de liberdade da soma dos quadrados dos resíduos
     :return: o valor-p da estatística F
     """
-    resultado = 1 - f.cdf(estatistica_f, grau_liberdade_numerador, grau_liberdade_denominador)
+    resultado = 1 - fda_f(estatistica_f, grau_liberdade_numerador, grau_liberdade_denominador)
     return resultado
 
 
@@ -188,23 +189,7 @@ y = [log(y_i) for y_i in y]
 
 
 
-print(inclinacao_reta(x, y))
-print(intercepto_reta(x, y))
-print(y_estimados(x, intercepto=intercepto_reta(x, y), inclinacao=inclinacao_reta(x, y)))
-print(soma_quadrados_residuos(x, y))
-print(soma_quadrados_explicados(x, y))
+print(f.cdf(12, 3, 9))
 
-"""
-Atentar que o coef_determinacao pode ser feito usando somas de quadrados dos resíduos ou explicados / totais, 
-ou simplesmente elevando o coeficiente de correlação ao quadrado, que é bem mais simples
-"""
-print(coef_determinacao(x, y))
-print(eb.coef_correlacao(x, y) ** 2)
-print(estatistica_f(media_dos_quadrados(soma_quadrados_explicados(x, y), 1), media_dos_quadrados(soma_quadrados_residuos(x, y), len(x) - 2)))
-print(p_value_estatistica_f(
-    estatistica_f(
-        media_dos_quadrados(soma_quadrados_explicados(x, y), 1),
-        media_dos_quadrados(soma_quadrados_residuos(x, y), len(x) - 2)
-    ), 1, len(x) - 2)
-)
+
 
