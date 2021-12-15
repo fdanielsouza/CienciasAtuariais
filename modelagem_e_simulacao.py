@@ -37,7 +37,7 @@ def teste_unif_qui_quadrado(n, gl, val_obs, a):
     return "Aceitar h0" if teste_h0 else "Rejeitar h0"
 
 
-def modelo_seguros_gompertz(n, B=0.0000429, c=1.1070839, idade, benef, juros):
+def modelo_seguros_gompertz(n, idade, benef, juros, B=0.0000429, c=1.1070839):
     v = 1/ (1 + juros)
     seq_uniforme = gerar_sequencia_congruente(n, 800, np.random.randint(low=1, high=9999))
     modelo = [log(1 - (log(c) * log(u) / B / c ** idade)) / log(c) for u in seq_uniforme]

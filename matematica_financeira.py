@@ -17,7 +17,7 @@ def n_composto(vf, i):
     return log(vf) / log(1 + i)
 
 
-def pmt_periodico(vf=None, vp=None, n, i, p=True):
+def pmt_periodico(vf, vp, n, i, p=True):
     if p:
         if vp:
             return vp * ((1 + i ** n) * i) / ((1 + i) ** n - 1)

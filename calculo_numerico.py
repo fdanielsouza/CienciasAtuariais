@@ -141,7 +141,7 @@ def metodo_secantes(
     return resultado
 
 
-def metodo_gauss_seidel(sistema: List[str], max_iteracoes: int = 10) -> List[float]:
+def metodo_gauss_jacobi(sistema: List[str], max_iteracoes: int = 10) -> List[float]:
     """
     Este método aproxima a solução de um sistema linear de forma iterativa. Caso alguma variável possua coeficiente 0,
     ele deve ser colocado (exemplo: "0x"), já o coeficiente 1 pode ser omitido. As variáveis podem ter quaisquer
@@ -164,7 +164,7 @@ def metodo_gauss_seidel(sistema: List[str], max_iteracoes: int = 10) -> List[flo
 
         sinais = re.findall("[\+\-]", eq)
         if len(sinais) < len(coeficientes):
-            sinais.insert(i, "-")
+            sinais.insert(0, "+")
 
         coeficiente_divisao = sinais[i] + coeficientes[i]
         del coeficientes[i]
@@ -174,17 +174,19 @@ def metodo_gauss_seidel(sistema: List[str], max_iteracoes: int = 10) -> List[flo
         vetor_coeficientes = [float(s + c) / float(coeficiente_divisao) for (s, c) in zip(sinais, coeficientes)]
         vetor_coeficientes.insert(i, 0)
         matriz.append(vetor_coeficientes)
+        print(matriz)
         vetor_independente.append(float(t_independente) / float(coeficiente_divisao))
 
     for i in range(max_iteracoes):
         vetor_iterativo_anterior = vetor_iterativo
         vetor_iterativo = somar_vetores_iguais(multiplicar_matriz_vetor(matriz, vetor_iterativo), vetor_independente)
-        erro = max([abs(b - a) for (a, b) in zip(vetor_iterativo_anterior, vetor_iterativo)])
+        erro = max([abs(b - a) for (a, b) in zip(vetor_iterativo_anterior, vetor_iterativo)]) / max(vetor_iterativo)
+        print(erro)
 
     return vetor_iterativo
 
 
-print(metodo_gauss_seidel(["10a + 2b + 3c = 7", "a + 5b + c = 8", "2a +3b +10c = 6"]))
+print(metodo_gauss_jacobi(["10a + 2b + 3c = 7", "a + 5b + c = 8", "2a +3b +10c = 6"]))
 
 
 
