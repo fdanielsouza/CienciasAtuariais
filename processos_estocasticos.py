@@ -58,7 +58,25 @@ def probabilidades_nascimento_morte(matriz):
     return vetor_probabilidade
 
 
-print(probabilidades_nascimento_morte(matriz_nascimento_morte(50, 30, 3, 5)))
+def tempo_medio_atendimento(la, mu, c, k):
+    matriz_nm = matriz_nascimento_morte(la, mu, c, k)
+    vetor_probs = probabilidades_nascimento_morte(matriz_nm)
+    soma_probs_estados = sum([i * v for i, v in enumerate(vetor_probs)])
+    tma = soma_probs_estados / la / (1 - vetor_probs[k])
+    return tma
+
+
+def tempo_medio_espera(la, mu, c, k):
+    matriz_nm = matriz_nascimento_morte(la, mu, c, k)
+    vetor_probs = probabilidades_nascimento_morte(matriz_nm)
+    probs_espera = [i * v for i, v in enumerate(vetor_probs) if c <= i < k]
+    tme = sum([(i + 1) * (p / sum(probs_espera)) / c / mu for i, p in enumerate(probs_espera)])
+    return tme
+
+
+
+probs_sistema = probabilidades_nascimento_morte(matriz_nascimento_morte(50, 30, 3, 5))
+print(tempo_medio_espera(100, 30, 3, 5) * 60 * 60)
 
 
 
