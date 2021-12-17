@@ -3,6 +3,17 @@ def transformar_vetor_em_matriz(vetor, linhas):
         yield vetor[i:i + linhas]
 
 
+def somar_vetores_iguais(vetor1, vetor2):
+    if len(vetor1) != len(vetor2):
+        return None
+
+    return [a + b for (a, b) in zip(vetor1, vetor2)]
+
+
+def multiplicar_matriz_vetor(matriz, vetor):
+    return [sum([im * iv for im, iv in zip(linha, vetor)]) for linha in matriz]
+
+
 def transpor_matriz(matriz):
     return list(map(list, zip(*matriz)))
 
@@ -92,5 +103,5 @@ m = [
 
 
 #m = [[-2, 1], [0, 0]]
-print(matriz_inversa(m))
+
 

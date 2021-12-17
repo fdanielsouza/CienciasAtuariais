@@ -1,5 +1,6 @@
 from math import exp
 from algebra_linear import *
+from algebra_linear import multiplicar_matriz_vetor
 
 
 
@@ -46,28 +47,18 @@ def matriz_nascimento_morte(la, mu, c, k):
         for j in range(k + 1)
     ]
 
-def modificar_matriz(matriz):
+
+def probabilidades_nascimento_morte(matriz):
     modificada = transpor_matriz(matriz)
     modificada[len(modificada) - 1] = [1 for _ in modificada[len(modificada) - 1]]
-    return modificada
+    inversa = matriz_inversa(modificada)
+    vetor_resultados_pi = [0 if i < len(inversa[0]) - 1 else 1 for i in range(len(inversa[0]))]
+    vetor_probabilidade = multiplicar_matriz_vetor(inversa, vetor_resultados_pi)
+
+    return vetor_probabilidade
 
 
-#print(modificar_matriz(matriz_nascimento_morte(50, 30, 3, 5)))
+print(probabilidades_nascimento_morte(matriz_nascimento_morte(50, 30, 3, 5)))
 
-m = [
-    [0.25, 0.25, 0.5, ],
-    [0.5, 0.5, 0],
-    [0, 0.25, 0.75]
-]
-
-m = [[4, 5, -3, 0, 7], [2, -1, 3, 1, 3], [1, -3, 2, 1, 4], [1, 2, -2, 5, 2], [5, 3, 8, 3, 1]]
-
-#m = [[4, 5, -3, 0], [2, -1, 3, 1], [1, -3, 2, 1], [1, 2, -2, 5]]
-
-#m = [[4, 3, 2], [4, 5, 6], [7, 9, 8]]
-
-
-print(m)
-print(expansao_laplace(m))
 
 
