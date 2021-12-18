@@ -1,7 +1,4 @@
-from math import exp
 from algebra_linear import *
-from algebra_linear import multiplicar_matriz_vetor
-
 
 
 def processo_de_markov(matriz, n):
@@ -27,12 +24,6 @@ def matriz_limite(matriz, tolerancia=0.00001):
         n += 1
     return matriz
 
-
-def probabilidade_nasc_morte(par, dt=0.00001):
-    return 1 - exp(-par * dt)
-
-def probabilidade_nasc_morte(la, mu, n):
-    return (1 - la / mu) * (la / mu) ** n
 
 def definicao_sistema_nasc_morte(la, mu, c, k):
     return [(la, mu * (i if i <= c else c)) for i in range(k + 1)]

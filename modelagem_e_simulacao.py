@@ -1,6 +1,7 @@
 import numpy as np
 from math import sqrt, log
 from distribuicoes import fda_inversa_qui2
+from matplotlib import pyplot as plt
 
 
 def eh_num_primo(n):
@@ -45,5 +46,71 @@ def modelo_seguros_gompertz(n, idade, benef, juros, B=0.0000429, c=1.1070839):
     return modelo, perda
 
 
-m, p = modelo_seguros_gompertz(10000, idade=70, benef=200, juros=0.03)
-print(m)
+def trans_inversa_2x(n):
+    u = gerar_sequencia_congruente(n, 900, np.random.randint(low=1, high=9999))
+    x = [v ** (1 / 2) for v in u]
+    return x
+
+
+def trans_inversa_exp(n, la):
+    u = gerar_sequencia_congruente(n, 900, np.random.randint(low=1, high=9999))
+    x = [-log(v) / la for v in u]
+    return x
+
+
+def trans_inversa_triangular(n):
+    u = gerar_sequencia_congruente(n, 900, np.random.randint(1, 999999))
+    x = [2 - (2 * (1 - v)) ** (1 / 2) if v > 1 / 2 else (2 * v) ** (1 / 2) for v in u]
+    return x
+
+
+def trans_inversa_weibull(n, a=3, b=1):
+    u = gerar_sequencia_congruente(n, 900, np.random.randint(1, 999999))
+    x = [b * (-log(v)) ** (1 / a) for v in u]
+    return x
+
+
+def trans_inversa_bernoulli(n, p):
+    u = gerar_sequencia_congruente(n, 900, np.random.randint(1, 999999))
+    x = [0 if v > p else 1 for v in u]
+    return x
+
+
+def trans_inversa_geometrica(n, p):
+    u = gerar_sequencia_congruente(n, 900, np.random.randint(1, 999999))
+    x = [log(v) / log(1 - p) for v in u]
+    return x
+
+
+def trans_inversa_normal(n, mu=0, si=1):
+    x = list()
+
+    for i in range(n):
+        u = gerar_sequencia_congruente(12, 300, np.random.randint(1, 99999))
+        v = si * (sum(u) - 6) + mu
+        x.append(v)
+
+    return x
+
+
+def metodo_aceitacao_rejeicao(n, vetor_probs):
+    def calculo_y(qtde_probs):
+        u = sum(gerar_sequencia_congruente(1, 300, np.random.randint(1, 99999)))
+        y = min([qtde_probs, int(qtde_probs * u) + 1])
+        return y
+
+    qtde_probs = len(vetor_probs)
+    c = max([p / 1 * len(vetor_probs) for p in vetor_probs])
+    v = [0 for _ in range(n)]
+
+    for i in range(n):
+        y = calculo_y(qtde_probs)
+        u = sum(gerar_sequencia_congruente(1, 300, np.random.randint(1, 99999)))
+        w = 1 / qtde_probs * c
+
+        while u > (vetor_probs[y - 1] / w):
+            y = calculo_y(qtde_probs)
+            u = sum(gerar_sequencia_congruente(1, 300, np.random.randint(1, 99999)))
+
+        v[i] = y
+    return v
